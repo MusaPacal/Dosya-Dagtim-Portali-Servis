@@ -1,0 +1,262 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DB02Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Dosyalar">
+          <Key>
+            <PropertyRef Name="DosyaId" />
+          </Key>
+          <Property Name="DosyaId" Type="int" Nullable="false" />
+          <Property Name="DosyaBaslik" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DosyaIcerik" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DosyaTarih" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Kategoriler">
+          <Key>
+            <PropertyRef Name="KategoriId" />
+          </Key>
+          <Property Name="KategoriId" Type="int" Nullable="false" />
+          <Property Name="KategoriAd" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Uye">
+          <Key>
+            <PropertyRef Name="UyeId" />
+          </Key>
+          <Property Name="UyeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UyeAdSoyad" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="UyeMail" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="YetkiId" Type="int" Nullable="false" />
+          <Property Name="UyeTarih" Type="datetime" Nullable="false" />
+          <Property Name="UyeParola" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Yetki">
+          <Key>
+            <PropertyRef Name="YetkiId" />
+          </Key>
+          <Property Name="YetkiId" Type="int" Nullable="false" />
+          <Property Name="Yetki" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Dosyalar_Uye">
+          <End Role="Uye" Type="Self.Uye" Multiplicity="1" />
+          <End Role="Dosyalar" Type="Self.Dosyalar" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Uye">
+              <PropertyRef Name="UyeId" />
+            </Principal>
+            <Dependent Role="Dosyalar">
+              <PropertyRef Name="DosyaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Kategoriler_ToDosyalar">
+          <End Role="Dosyalar" Type="Self.Dosyalar" Multiplicity="1" />
+          <End Role="Kategoriler" Type="Self.Kategoriler" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Dosyalar">
+              <PropertyRef Name="DosyaId" />
+            </Principal>
+            <Dependent Role="Kategoriler">
+              <PropertyRef Name="KategoriId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Uye_ToYetki">
+          <End Role="Yetki" Type="Self.Yetki" Multiplicity="1" />
+          <End Role="Uye" Type="Self.Uye" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Yetki">
+              <PropertyRef Name="YetkiId" />
+            </Principal>
+            <Dependent Role="Uye">
+              <PropertyRef Name="UyeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DB02ModelStoreContainer">
+          <EntitySet Name="Dosyalar" EntityType="Self.Dosyalar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kategoriler" EntityType="Self.Kategoriler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Uye" EntityType="Self.Uye" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Yetki" EntityType="Self.Yetki" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Dosyalar_Uye" Association="Self.FK_Dosyalar_Uye">
+            <End Role="Uye" EntitySet="Uye" />
+            <End Role="Dosyalar" EntitySet="Dosyalar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Kategoriler_ToDosyalar" Association="Self.FK_Kategoriler_ToDosyalar">
+            <End Role="Dosyalar" EntitySet="Dosyalar" />
+            <End Role="Kategoriler" EntitySet="Kategoriler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Uye_ToYetki" Association="Self.FK_Uye_ToYetki">
+            <End Role="Yetki" EntitySet="Yetki" />
+            <End Role="Uye" EntitySet="Uye" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DB02Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Dosyalar">
+          <Key>
+            <PropertyRef Name="DosyaId" />
+          </Key>
+          <Property Name="DosyaId" Type="Int32" Nullable="false" />
+          <Property Name="DosyaBaslik" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DosyaIcerik" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DosyaTarih" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Uye" Relationship="Self.FK_Dosyalar_Uye" FromRole="Dosyalar" ToRole="Uye" />
+          <NavigationProperty Name="Kategoriler" Relationship="Self.FK_Kategoriler_ToDosyalar" FromRole="Dosyalar" ToRole="Kategoriler" />
+        </EntityType>
+        <EntityType Name="Kategoriler">
+          <Key>
+            <PropertyRef Name="KategoriId" />
+          </Key>
+          <Property Name="KategoriId" Type="Int32" Nullable="false" />
+          <Property Name="KategoriAd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Dosyalar" Relationship="Self.FK_Kategoriler_ToDosyalar" FromRole="Kategoriler" ToRole="Dosyalar" />
+        </EntityType>
+        <EntityType Name="Uye">
+          <Key>
+            <PropertyRef Name="UyeId" />
+          </Key>
+          <Property Name="UyeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UyeAdSoyad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UyeMail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="YetkiId" Type="Int32" Nullable="false" />
+          <Property Name="UyeTarih" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UyeParola" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Dosyalar" Relationship="Self.FK_Dosyalar_Uye" FromRole="Uye" ToRole="Dosyalar" />
+          <NavigationProperty Name="Yetki" Relationship="Self.FK_Uye_ToYetki" FromRole="Uye" ToRole="Yetki" />
+        </EntityType>
+        <EntityType Name="Yetki">
+          <Key>
+            <PropertyRef Name="YetkiId" />
+          </Key>
+          <Property Name="YetkiId" Type="Int32" Nullable="false" />
+          <Property Name="Yetki1" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Uye" Relationship="Self.FK_Uye_ToYetki" FromRole="Yetki" ToRole="Uye" />
+        </EntityType>
+        <Association Name="FK_Dosyalar_Uye">
+          <End Role="Uye" Type="Self.Uye" Multiplicity="1" />
+          <End Role="Dosyalar" Type="Self.Dosyalar" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Uye">
+              <PropertyRef Name="UyeId" />
+            </Principal>
+            <Dependent Role="Dosyalar">
+              <PropertyRef Name="DosyaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Kategoriler_ToDosyalar">
+          <End Role="Dosyalar" Type="Self.Dosyalar" Multiplicity="1" />
+          <End Role="Kategoriler" Type="Self.Kategoriler" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Dosyalar">
+              <PropertyRef Name="DosyaId" />
+            </Principal>
+            <Dependent Role="Kategoriler">
+              <PropertyRef Name="KategoriId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Uye_ToYetki">
+          <End Role="Yetki" Type="Self.Yetki" Multiplicity="1" />
+          <End Role="Uye" Type="Self.Uye" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Yetki">
+              <PropertyRef Name="YetkiId" />
+            </Principal>
+            <Dependent Role="Uye">
+              <PropertyRef Name="UyeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DB02Entities3" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Dosyalar" EntityType="Self.Dosyalar" />
+          <EntitySet Name="Kategoriler" EntityType="Self.Kategoriler" />
+          <EntitySet Name="Uye" EntityType="Self.Uye" />
+          <EntitySet Name="Yetki" EntityType="Self.Yetki" />
+          <AssociationSet Name="FK_Dosyalar_Uye" Association="Self.FK_Dosyalar_Uye">
+            <End Role="Uye" EntitySet="Uye" />
+            <End Role="Dosyalar" EntitySet="Dosyalar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Kategoriler_ToDosyalar" Association="Self.FK_Kategoriler_ToDosyalar">
+            <End Role="Dosyalar" EntitySet="Dosyalar" />
+            <End Role="Kategoriler" EntitySet="Kategoriler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Uye_ToYetki" Association="Self.FK_Uye_ToYetki">
+            <End Role="Yetki" EntitySet="Yetki" />
+            <End Role="Uye" EntitySet="Uye" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DB02ModelStoreContainer" CdmEntityContainer="DB02Entities3">
+          <EntitySetMapping Name="Dosyalar">
+            <EntityTypeMapping TypeName="DB02Model.Dosyalar">
+              <MappingFragment StoreEntitySet="Dosyalar">
+                <ScalarProperty Name="DosyaId" ColumnName="DosyaId" />
+                <ScalarProperty Name="DosyaBaslik" ColumnName="DosyaBaslik" />
+                <ScalarProperty Name="DosyaIcerik" ColumnName="DosyaIcerik" />
+                <ScalarProperty Name="DosyaTarih" ColumnName="DosyaTarih" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Kategoriler">
+            <EntityTypeMapping TypeName="DB02Model.Kategoriler">
+              <MappingFragment StoreEntitySet="Kategoriler">
+                <ScalarProperty Name="KategoriId" ColumnName="KategoriId" />
+                <ScalarProperty Name="KategoriAd" ColumnName="KategoriAd" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Uye">
+            <EntityTypeMapping TypeName="DB02Model.Uye">
+              <MappingFragment StoreEntitySet="Uye">
+                <ScalarProperty Name="UyeId" ColumnName="UyeId" />
+                <ScalarProperty Name="UyeAdSoyad" ColumnName="UyeAdSoyad" />
+                <ScalarProperty Name="UyeMail" ColumnName="UyeMail" />
+                <ScalarProperty Name="YetkiId" ColumnName="YetkiId" />
+                <ScalarProperty Name="UyeTarih" ColumnName="UyeTarih" />
+                <ScalarProperty Name="UyeParola" ColumnName="UyeParola" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Yetki">
+            <EntityTypeMapping TypeName="DB02Model.Yetki">
+              <MappingFragment StoreEntitySet="Yetki">
+                <ScalarProperty Name="YetkiId" ColumnName="YetkiId" />
+                <ScalarProperty Name="Yetki1" ColumnName="Yetki" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
